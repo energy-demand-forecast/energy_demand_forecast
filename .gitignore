@@ -4,3 +4,4 @@ __pycache__
 *.xls
 *.xlsx
 weather.csv
+gregs_directory/weather_data_and_cleaning
