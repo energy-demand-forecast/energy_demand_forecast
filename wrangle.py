@@ -43,6 +43,9 @@ def clean_ercot_datetime(df):
     # 9. Rename datetime column and set as index
     df.rename(columns={'new_datetime':'datetime'},inplace=True)
     df = df.set_index('datetime').sort_index()
+    # 10. Fill the null values using Series.interpolate that uses average
+    # of close values (an hour apart in our case)
+    df.ercot_load.interpolate(method='time',limit_direction='both', inplace=True)
     
     return df
 
