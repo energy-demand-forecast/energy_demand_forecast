@@ -79,6 +79,9 @@ def prep_ercot():
     
     #clean up datetime info
     df = clean_ercot_datetime(df)
+
+    #trim data timeframe
+    df = df.loc['2010-01':'2022-06']
     
     #create new day type features
     df = create_day_columns(df)
