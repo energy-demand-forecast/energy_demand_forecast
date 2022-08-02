@@ -120,23 +120,10 @@ def get_ercot_df():
 
     if os.path.isfile(filename):
         #If file exists, go ahead and grab that csv
-        return pd.read_csv(filename,index_col='new_datetime',parse_dates=['new_datetime'])
+        return pd.read_csv(filename,index_col='datetime',parse_dates=['datetime'])
     else: 
         #re-prep this data from coast_df.csv
         df = prep_ercot()
         #Save this dataframe to a csv
         df.to_csv(filename)
-        return df
-    
-def get_combined_df(get_central = True):
-    '''
-    Retrieves a cleaned, combined DataFrame of energy demand
-    and weather data. Returns as a DataFrame.
-    '''
-    #If file exists, grab the CSV
-    df = pd.read_csv('combined_df.csv', index_col = 'datetime', parse_dates = ['datetime'], date_parser = lambda col: pd.to_datetime(col, utc = True))
-    if get_central == True:
-        #Converting UTC to CST
-        return df.tz_convert('US/Central')
-    else:
         return df
