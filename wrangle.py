@@ -120,10 +120,42 @@ def get_ercot_df():
 
     if os.path.isfile(filename):
         #If file exists, go ahead and grab that csv
-        return pd.read_csv(filename,index_col='datetime',parse_dates=['datetime'])
+        return pd.read_csv(filename,index_col='new_datetime',parse_dates=['new_datetime'])
     else: 
         #re-prep this data from coast_df.csv
         df = prep_ercot()
         #Save this dataframe to a csv
         df.to_csv(filename)
         return df
+    
+def get_combined_df(get_central = True):
+    '''
+    Retrieves a cleaned, combined DataFrame of energy demand
+    and weather data. Returns as a DataFrame.
+    '''
+    #If file exists, grab the CSV
+    df = pd.read_csv('combined_df.csv', index_col = 'datetime', parse_dates = ['datetime'], date_parser = lambda col: pd.to_datetime(col, utc = True))
+    if get_central == True:
+        #Converting UTC to CST
+        return df.tz_convert('US/Central')
+    else:
+        return df
+
+def get_prophet_df(get_central=True):
+    '''
+    Retrieves a cleaned dataframe and formats it for input into
+    the FB Prophet model.
+
+    Parameters:
+      (O) get_central: Bool (Default True) - Return the datetime index in US/Central time. False returns UTC.  
+    '''
+    #Acquire combined dataframe
+    df = wrangle.get_combined_df(get_central = get_central)
+    #Pull index/load data into new 
+    df2 = pd.DataFrame(df.ercot_load)
+    #Move index out
+    df2.reset_index(drop=False, inplace=True)
+    #Rename columns
+    df2.rename(columns = {'datetime':'ds','ercot_load':'y'},inplace=True)
+    
+    return df2

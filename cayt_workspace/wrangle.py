@@ -140,3 +140,22 @@ def get_combined_df(get_central = True):
         return df.tz_convert('US/Central')
     else:
         return df
+
+def get_prophet_df(get_central=True):
+    '''
+    Retrieves a cleaned dataframe and formats it for input into
+    the FB Prophet model.
+
+    Parameters:
+      (O) get_central: Bool (Default True) - Return the datetime index in US/Central time. False returns UTC.  
+    '''
+    #Acquire combined dataframe
+    df = wrangle.get_combined_df(get_central = get_central)
+    #Pull index/load data into new 
+    df2 = pd.DataFrame(df.ercot_load)
+    #Move index out
+    df2.reset_index(drop=False, inplace=True)
+    #Rename columns
+    df2.rename(columns = {'datetime':'ds','ercot_load':'y'},inplace=True)
+    
+    return df2
