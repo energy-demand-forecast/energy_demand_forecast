@@ -150,7 +150,7 @@ def get_prophet_df(get_central=True):
       (O) get_central: Bool (Default True) - Return the datetime index in US/Central time. False returns UTC.  
     '''
     #Acquire combined dataframe
-    df = wrangle.get_combined_df(get_central = get_central)
+    df = get_combined_df(get_central = get_central)
     #Pull index/load data into new 
     df2 = pd.DataFrame(df.ercot_load)
     #Move index out
