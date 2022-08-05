@@ -17,9 +17,15 @@
 
 ### Initial questions on the data
 
->  - Questions
->  - Thoughts
->  - etc
+>  - Weather and Energy Demand:
+>   - How does temperature impact energy demand? 
+>   - Does humidity impact energy demand?
+>   - Is there a relationship between precipitation and energy demand?
+
+>  - Date/Time and Energy Demand:
+>   - How does the day of the week impact energy demand?
+>   - Does the time of day impact energy demand?
+>   - How does energy demand differ on holidays?
 
 ---
 
@@ -29,6 +35,7 @@
 <hr style="background-color:silver;height:3px;" />
 
 **Project Goal:**
+Produce a time-series model that forecasts three days of energy demand in ERCOT's coastal region. Deploying this model will allow ERCOT to anticipate demand effectively in order to schedule energy generation and inform bidding prices.
 
 **Discoveries and Recommendations**
 
@@ -40,7 +47,7 @@
 
 |Target|Definition|
 |:-------|:----------|
-| Target | Definition|
+| ercot_load| ERCOT's energy load for the coastal region - measured in megawatts(MW)|
 
 |Feature|Definition|
 |:-------|:----------|
@@ -68,7 +75,7 @@
 <details>
   <summary><i>Click to expand</i></summary>
   <ul>
-   <li><b>Acquire</b> data from XXXX</li>
+   <li><b>Acquire</b> data from https://www.ercot.com/gridinfo/load/load_hist and https://www.visualcrossing.com/weather-data</li>
     <li>Clean and <b>prepare</b>data for the exploration. </li>
     <li>Create wrangle.py to store functions I created to automate the cleaning and preparation process.</li>
     <li>Separate train, validate, test subsets and scaled data.</li>
