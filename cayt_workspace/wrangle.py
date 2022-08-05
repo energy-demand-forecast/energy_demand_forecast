@@ -149,7 +149,7 @@ def get_prophet_df():
     NOTE: Prophet does not support timezone - need it in UTC, then make tz naive
     '''
     #Acquire combined dataframe
-    df = wrangle.get_combined_df(get_central = False)
+    df = get_combined_df(get_central = False)
     #Pull index/load data into new 
     df2 = pd.DataFrame(df.ercot_load)
     #Move index out
