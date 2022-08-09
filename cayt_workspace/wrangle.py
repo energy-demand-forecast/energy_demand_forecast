@@ -160,3 +160,41 @@ def get_prophet_df():
     df2.ds = df2.ds.dt.tz_localize(None)
     
     return df2
+
+def get_prophet_df_w_meantemp():
+    '''
+    Retrieves a cleaned dataframe and formats it for input into
+    the FB Prophet model.
+    
+    NOTE: Prophet does not support timezone - need it in UTC, then make tz naive
+    '''
+    #Acquire combined dataframe
+    df = get_combined_df(get_central = False)
+    #Calculate mean_temp column
+    df['mean_temp'] = (df.hs_temp + df.gv_temp + df.pl_temp + df.vc_temp)/4
+
+    #Pull index/load/temp data into new dataframe
+    df2 = pd.DataFrame(df[['ercot_load','mean_temp']])
+
+    #Move index out
+    df2.reset_index(drop=False, inplace=True)
+    #Rename columns
+    df2.rename(columns = {'datetime':'ds','ercot_load':'y'},inplace=True)
+    #Make TZ naive
+    df2.ds = df2.ds.dt.tz_localize(None)
+    
+    return df2
+
+def print_model_results(name,df_p_1d,df_p_3d):
+    #Print model name
+    print(f'\033[1m{name} model performance:\033[0m')
+    #grab model stats
+    rmse1 = df_p_1d.loc[0,'rmse']
+    mape1 = df_p_1d.loc[0,'mape']*100
+    rmse3 = df_p_3d.loc[0,'rmse']
+    mape3 = df_p_3d.loc[0,'mape']*100
+    print(f'1 day rmse: {round(rmse1,0)} MW')
+    print(f'1 day mape: {round(mape1,1)}%')
+    print(f'3 day rmse: {round(rmse3,0)} MW')
+    print(f'3 day mape: {round(mape3,1)}%')
+    return None
