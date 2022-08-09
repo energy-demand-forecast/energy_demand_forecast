@@ -4,6 +4,8 @@ import datetime
 import re
 import os
 from pandas.tseries.holiday import USFederalHolidayCalendar
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def clean_ercot_datetime(df):
     '''
@@ -197,3 +199,19 @@ def print_model_results(name,df_p_1d,df_p_3d):
     print(f'3 day rmse: {round(rmse3,0)} MW')
     print(f'3 day mape: {round(mape3,1)}%')
     return None
+
+#### EXPLORE FUNCTIONS ######
+def plot_temp_ercot(train):
+    sns.scatterplot(data=train, x='mean_temp',y='ercot_load')
+    plt.xlabel('Mean Temperature (°F)',fontsize=14)
+    plt.ylabel("Coastal ERCOT Demand (MW)",fontsize=14)
+    plt.axvline(x=(50),color='black',ls='--')
+    plt.axvline(x=(70),color='black',ls='--')
+    plt.title("ERCOT Demand and Mean Temperature",fontsize=14)
+    plt.show()
+
+def temp_subgroups(train):
+    less_50 = train[train.mean_temp <=50]
+    mid_temp = train[(train.mean_temp>50)& (train.mean_temp<70)]
+    greater_70 = train[train.mean_temp >=70]
+    return less_50, mid_temp, greater_70
