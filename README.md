@@ -1,11 +1,12 @@
 # Project Title
-*Audience: Target audience for my final report is*
+*Audience: Target audience for my final report is the data sciene team at ERCOT*
 
 
 <hr style="background-color:silver;height:3px;" />
 
 ## Project Summary
 <hr style="background-color:silver;height:3px;" />
+There is a need for accurate energy demand forecasting in order for ERCOT to schedule energy generation and inform bidding prices. We analyzed historical weather data and ERCOT demand from 2010-2022 in order to create a time-series model to predict a three day forecast for energy demand in ERCOT's coastal region. Through exploration we examined the relationship between weather and ERCOT demand, as well as, date/time information and ERCOT demand. We utilized time-series models (Holt Winters and Facebook Prophet) to forecast ERCOT demand for a three-day period and beat baseline by %. We suggest using this model in production to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
 
 ### Project Deliverables
 > - A final report notebook
@@ -20,7 +21,6 @@
 >  - Weather and Energy Demand:
 >   - How does temperature impact energy demand? 
 >   - Does humidity impact energy demand?
->   - Is there a relationship between precipitation and energy demand?
 
 >  - Date/Time and Energy Demand:
 >   - How does the day of the week impact energy demand?
@@ -51,10 +51,65 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 
 |Feature|Definition|
 |:-------|:----------|
-| Feature       | Definition |
-| Feature        | Definition |
-| Feature       | Definition |
-| Feature        | Definition 
+| dow | The day of week. Mon-Sun |
+| is_weeekday | 1 = weekday 0 = weekend |
+| is_obs_holiday | 1 = holiday 0 =weekend |
+|hour| Hour of the day. 24 hour clock|
+| hs_temp | Temperature in Fahrenheit in Houston |
+| hs_feelslike | Combination of temperature, wind chill & heat index in Houston|
+| hs_dew | dew point in Houston |
+| hs_humidity | Relative humidity in Houston|
+| hs_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Houston |
+| hs_windgust | Instantaneous speed of wind in Houston|
+| hs_windir | Two minute average of wind direction in Houston|
+| hs_sealevelpressure | Sea level pressure in Houston| 
+| hs_cloudcover | Percentage of sky that is covered by cloud in Houston|
+| hs_visibility | Distance that can be viewed in Houston|
+| hs_solarradiation | Solar radiation in Houston |
+| hs_solarenergy | Solar energy in Houston |
+| hs_uvindex | UV index in Houston |
+| gv_temp | Temperature in Fahrenheit in Galveston |
+| gv_feelslike | Combination of temperature, wind chill & heat index in Galveston |
+| gv_dew | dew point in Galveston|
+| gv_humidity | Relative humidity in Galveston|
+| gv_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Galveston  |
+| gv_windgust | Instantaneous speed of wind in Galveston |
+| gv_windir | Two minute average of wind direction in Galveston |
+| gv_sealevelpressure | Sea level pressure in Galveston| 
+| gv_cloudcover | Percentage of sky that is covered by cloud in Galveston |
+| gv_visibility | Distance that can be viewed in Galveston |
+| gv_solarradiation | Solar radiation in Galveston  |
+| gv_solarenergy | Solar energy in Galveston  |
+| gv_uvindex | UV index in Galveston |
+| pl_temp | Temperature in Fahrenheit in Port Lavaca|
+| pl_feelslike | Combination of temperature, wind chill & heat index in Port Lavaca |
+| pl_dew | dew point in Port Lavaca |
+| pl_humidity | Relative humidity in Port Lavaca|
+| pl_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Port Lavaca  |
+| pl_windgust | Instantaneous speed of wind in Port Lavaca |
+| pl_windir | Two minute average of wind direction in Port Lavaca |
+| pl_sealevelpressure | Sea level pressure in Port Lavaca| 
+| pl_cloudcover | Percentage of sky that is covered by cloud in Port Lavaca |
+| pl_visibility | Distance that can be viewed in Port Lavaca |
+| pl_solarradiation | Solar radiation in Port Lavaca  |
+| pl_solarenergy | Solar energy in Port Lavaca  |
+| pl_uvindex | UV index in Port Lavaca |
+| vc_temp | Temperature in Fahrenheit in Victoria|
+| vc_feelslike | Combination of temperature, wind chill & heat index in Victoria|
+| vc_dew | dew point in Victoria|
+| vc_humidity | Relative humidity in Victoria|
+| vc_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Victoria  |
+| vc_windgust | Instantaneous speed of wind in Victoria |
+| vc_windir | Two minute average of wind direction in Victoria|
+| vc_sealevelpressure | Sea level pressure in Victoria| 
+| vc_cloudcover | Percentage of sky that is covered by cloud in Victoria |
+| vc_visibility | Distance that can be viewed in Victoria |
+| vc_solarradiation | Solar radiation in Victoria  |
+| vc_solarenergy | Solar energy in Victoria  |
+| vc_uvindex | UV index in Victoria |
+|mean_temp| The average temperature in Fahrenheit for all four locactions|
+|mean_feelslike| The average feelslike temperature for all four locations|
+|mean_humidity| The average humidity for all four locations|
 
 
 <hr style="background-color:silver;height:3px;" />
