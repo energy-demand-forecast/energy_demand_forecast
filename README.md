@@ -18,11 +18,11 @@ There is a need for accurate energy demand forecasting in order for ERCOT to sch
 
 ### Initial questions on the data
 
->  - Weather and Energy Demand:
+Weather and Energy Demand:
 >   - How does temperature impact energy demand? 
 >   - Does humidity impact energy demand?
 
->  - Date/Time and Energy Demand:
+Date/Time and Energy Demand:
 >   - How does the day of the week impact energy demand?
 >   - Does the time of day impact energy demand?
 >   - How does energy demand differ on holidays?
@@ -51,7 +51,7 @@ With additional time:
 > - 
 
 Recommendations:
-We suggest delpoying this model to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
+> We suggest delpoying this model to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
 
 
 
