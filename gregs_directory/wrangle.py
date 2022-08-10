@@ -215,3 +215,10 @@ def temp_subgroups(train):
     mid_temp = train[(train.mean_temp>50)& (train.mean_temp<70)]
     greater_70 = train[train.mean_temp >=70]
     return less_50, mid_temp, greater_70
+
+##### UTILS #####
+
+# Getting Mean Absolute Percentage Error#
+
+def mean_absolute_percentage_error(y_true, y_pred):
+    return np.mean(np.abs((y_true - y_pred) / y_true)) 
