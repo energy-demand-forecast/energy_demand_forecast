@@ -1,5 +1,5 @@
-# Project Title
-*Audience: Target audience for my final report is the data science team at ERCOT*
+# Energy Demand Forecast
+*Audience: The target audience for our final report is the data science team at ERCOT*
 
 
 <hr style="background-color:silver;height:3px;" />
