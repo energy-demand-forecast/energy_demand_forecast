@@ -38,6 +38,7 @@ There is a need for accurate energy demand forecasting in order for ERCOT to sch
 Produce a time-series model that forecasts three days of energy demand in ERCOT's coastal region. Deploying this model will allow ERCOT to anticipate demand effectively in order to schedule energy generation and inform bidding prices.
 
 **Discoveries and Recommendations**
+
 Key Findings:
 > - Temperature has a strong correlation with ERCOT energy demand when the temperature is above 70 degrees and a moderate correlation when the temperature is below 50 degrees. 
 > - Weekdays require more energy demand than the weekend.
