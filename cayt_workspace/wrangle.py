@@ -196,9 +196,9 @@ def print_model_results(name,df_p_1d,df_p_3d):
     rmse3 = df_p_3d.loc[0,'rmse']
     mape3 = df_p_3d.loc[0,'mape']*100
     print(f'1 day rmse: {round(rmse1,0)} MW')
-    print(f'1 day mape: {round(mape1,1)}%')
+    print(f'1 day mape: {round(mape1,2)}%')
     print(f'3 day rmse: {round(rmse3,0)} MW')
-    print(f'3 day mape: {round(mape3,1)}%')
+    print(f'3 day mape: {round(mape3,2)}%')
     return None
 
 #### EXPLORE FUNCTIONS ######
@@ -223,3 +223,23 @@ def temp_subgroups(train):
 
 def mean_absolute_percentage_error(y_true, y_pred):
     return np.mean(np.abs((y_true - y_pred) / y_true)) 
+
+# Holiday
+
+def get_holiday_df(trainr):
+    #create calendar object
+    cal = USFederalHolidayCalendar()
+    #get holidays as list of dates
+    train_holidays = cal.holidays(start=trainr.ds.min(),end=trainr.ds.max())
+
+    # Transition to dataframe with holiday, ds columns
+    holiday_df = pd.DataFrame(trainr.ds)
+    #For each datetime, get if it lands on a holiday
+    holiday_df['holiday'] = holiday_df.ds.dt.date.astype(str).isin(train_holidays.astype(str)).astype(int)
+
+    #Filter down to just the holidays
+    only_holidays = holiday_df[holiday_df.holiday==1]
+    #Convert that column to string
+    only_holidays.holiday = only_holidays.holiday.astype(str)
+
+    return only_holidays
