@@ -6,6 +6,7 @@ import os
 from pandas.tseries.holiday import USFederalHolidayCalendar
 import seaborn as sns
 import matplotlib.pyplot as plt
+from IPython.display import Markdown, display
 
 def clean_ercot_datetime(df):
     '''
@@ -215,6 +216,24 @@ def temp_subgroups(train):
     mid_temp = train[(train.mean_temp>50)& (train.mean_temp<70)]
     greater_70 = train[train.mean_temp >=70]
     return less_50, mid_temp, greater_70
+
+def plot_weekday_energy(train):
+    reg_days = train[train.is_obs_holiday == 0].copy()
+    display(Markdown('### Energy Use by Weekday'));
+    ax = reg_days.groupby([reg_days.dow, reg_days.index.hour]).ercot_load.mean().unstack(0).plot()
+    holly_days = train[train.is_obs_holiday == 1].copy()
+    holly_days.groupby([holly_days.index.hour]).ercot_load.mean().plot(label = 'Holiday', ax = ax, ls = '--')
+    #Reorder legend
+    handles, labels = ax.get_legend_handles_labels()
+    handles = [handles[1]] + handles[5:7] + [handles[4]] + [handles[0]] + handles[2:4] + [handles[7]]
+    labels = [labels[1]] + labels[5:7] + [labels[4]] + [labels[0]] + labels[2:4] + [labels[7]]
+    plt.title('Average ERCOT Demand by Hour and Day of Week',fontsize=18)
+    plt.xlabel('Hour of Day',fontsize=16)
+    plt.ylabel('ERCOT Demand (MW)',fontsize=16)
+    #plt.legend()
+    plt.legend(handles=handles,labels=labels,title=None,fontsize=14)
+    plt.show()
+    return None
 
 ##### UTILS #####
 
