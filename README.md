@@ -1,5 +1,5 @@
-# Project Title
-*Audience: Target audience for my final report is the data sciene team at ERCOT*
+# Energy Demand Forecast
+*Audience: The target audience for our final report is the data science team at ERCOT*
 
 
 <hr style="background-color:silver;height:3px;" />
@@ -11,6 +11,7 @@ There is a need for accurate energy demand forecasting in order for ERCOT to sch
 ### Project Deliverables
 > - A final report notebook
 > - Python modules for automation and to facilitate project reproduction
+> - Presentation 19 August 2022 (slides)
 > - Notebooks that show:
 >  - Data acquisition and preparation 
 >  - exploratory analysis not included in final report
@@ -18,11 +19,11 @@ There is a need for accurate energy demand forecasting in order for ERCOT to sch
 
 ### Initial questions on the data
 
->  - Weather and Energy Demand:
+Weather and Energy Demand:
 >   - How does temperature impact energy demand? 
 >   - Does humidity impact energy demand?
 
->  - Date/Time and Energy Demand:
+Date/Time and Energy Demand:
 >   - How does the day of the week impact energy demand?
 >   - Does the time of day impact energy demand?
 >   - How does energy demand differ on holidays?
@@ -39,6 +40,22 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 
 **Discoveries and Recommendations**
 
+Key Findings:
+> - Temperature has a strong correlation with ERCOT energy demand when the temperature is above 70 degrees and a moderate correlation when the temperature is below 50 degrees. 
+> - Weekdays require more energy demand than the weekend.
+> - Holidays use less demand than non-holidays.
+> - Energy demand is lowest at 0400 and begins to increase shortly after. Energy demand peaks at 1700, and then gradually declines back to the lowest point. 
+> - Modeling information?
+
+With additional time:
+> - We would like to explore the population growth in ERCOT's coastal region and how that has impacted energy demand.
+> - Perform additional moedling to include LSTM.
+
+Recommendations:
+> We suggest delpoying this model to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
+> Utilizing uniform data entry processes in regards to date and time would ease in future acquisition of data.
+
+
 
 <hr style="background-color:silver;height:3px;" />
 
@@ -51,13 +68,12 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 
 |Feature|Definition|
 |:-------|:----------|
-| dow | The day of week. Mon-Sun |
+| dow | Day of the week. Mon-Sun |
 | is_weeekday | 1 = weekday 0 = weekend |
-| is_obs_holiday | 1 = holiday 0 =weekend |
-|hour| Hour of the day. 24 hour clock|
+| is_obs_holiday | 1 = holiday 0 = non-holiday|
 | hs_temp | Temperature in Fahrenheit in Houston |
 | hs_feelslike | Combination of temperature, wind chill & heat index in Houston|
-| hs_dew | dew point in Houston |
+| hs_dew | Dew point in Houston |
 | hs_humidity | Relative humidity in Houston|
 | hs_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Houston |
 | hs_windgust | Instantaneous speed of wind in Houston|
@@ -70,7 +86,7 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 | hs_uvindex | UV index in Houston |
 | gv_temp | Temperature in Fahrenheit in Galveston |
 | gv_feelslike | Combination of temperature, wind chill & heat index in Galveston |
-| gv_dew | dew point in Galveston|
+| gv_dew | Dew point in Galveston|
 | gv_humidity | Relative humidity in Galveston|
 | gv_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Galveston  |
 | gv_windgust | Instantaneous speed of wind in Galveston |
@@ -83,7 +99,7 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 | gv_uvindex | UV index in Galveston |
 | pl_temp | Temperature in Fahrenheit in Port Lavaca|
 | pl_feelslike | Combination of temperature, wind chill & heat index in Port Lavaca |
-| pl_dew | dew point in Port Lavaca |
+| pl_dew | Dew point in Port Lavaca |
 | pl_humidity | Relative humidity in Port Lavaca|
 | pl_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Port Lavaca  |
 | pl_windgust | Instantaneous speed of wind in Port Lavaca |
@@ -96,7 +112,7 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 | pl_uvindex | UV index in Port Lavaca |
 | vc_temp | Temperature in Fahrenheit in Victoria|
 | vc_feelslike | Combination of temperature, wind chill & heat index in Victoria|
-| vc_dew | dew point in Victoria|
+| vc_dew | Dew point in Victoria|
 | vc_humidity | Relative humidity in Victoria|
 | vc_precip | Amount of liquid equivalent precipitation (rain, snow etc.) in Victoria  |
 | vc_windgust | Instantaneous speed of wind in Victoria |
@@ -107,9 +123,9 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 | vc_solarradiation | Solar radiation in Victoria  |
 | vc_solarenergy | Solar energy in Victoria  |
 | vc_uvindex | UV index in Victoria |
-|mean_temp| The average temperature in Fahrenheit for all four locactions|
-|mean_feelslike| The average feelslike temperature for all four locations|
-|mean_humidity| The average humidity for all four locations|
+|mean_temp| The average temperature in Fahrenheit for all four geographic locactions|
+|mean_feelslike| The average feelslike temperature for all four greographic locations|
+|mean_humidity| The average humidity for all four geographic locations|
 
 
 <hr style="background-color:silver;height:3px;" />
@@ -117,12 +133,18 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 ## Reproducing this project
 <hr style="background-color:silver;height:3px;" />
 
-> In order to reproduce this project you will need your own environment file and access to the database. You can reproduce this project with the following steps:
+> You can reproduce this project with the following steps:
 > - Read this README
 > - Clone the repository or download all files into your working directory
-> - Add your environment file to your working directory:
->  - filename should be env.py
->  - contains variables: username, password, host
+> - Libraries used:
+>     - pandas
+>     - matplotlib
+>     - seaborn
+>     - numpy
+>     - scikit-learn
+>     - plotly
+>     - sktime
+>     - Prophet
 > - Run the Final_Report notebook or explore the other notebooks for greater insight into the project.
 
 ### Project Plan 
@@ -132,7 +154,7 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
   <ul>
    <li><b>Acquire</b> data from https://www.ercot.com/gridinfo/load/load_hist and https://www.visualcrossing.com/weather-data</li>
     <li>Clean and <b>prepare</b>data for the exploration. </li>
-    <li>Create wrangle.py to store functions I created to automate the cleaning and preparation process.</li>
+    <li>Create wrangle.py to store functions we created to automate the cleaning and preparation process.</li>
     <li>Separate train, validate, test subsets and scaled data.</li>
     <li><b>Explore</b> the data through visualizations; Document findings and takeaways.</li>
     <li>Perform <b>modeling</b>:
