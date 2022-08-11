@@ -48,10 +48,11 @@ Key Findings:
 
 With additional time:
 > - We would like to explore the population growth in ERCOT's coastal region and how that has impacted energy demand.
-> - 
+> - Perform additional moedling to include LSTM.
 
 Recommendations:
 > We suggest delpoying this model to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
+> Utilizing uniform data entry processes in regards to date and time would ease in future acquisition of data.
 
 
 
