@@ -11,6 +11,7 @@ There is a need for accurate energy demand forecasting in order for ERCOT to sch
 ### Project Deliverables
 > - A final report notebook
 > - Python modules for automation and to facilitate project reproduction
+> - Presentation 19 August 2022 (slides)
 > - Notebooks that show:
 >  - Data acquisition and preparation 
 >  - exploratory analysis not included in final report
@@ -132,12 +133,18 @@ Recommendations:
 ## Reproducing this project
 <hr style="background-color:silver;height:3px;" />
 
-> In order to reproduce this project you will need your own environment file and access to the database. You can reproduce this project with the following steps:
+> You can reproduce this project with the following steps:
 > - Read this README
 > - Clone the repository or download all files into your working directory
-> - Add your environment file to your working directory:
->  - filename should be env.py
->  - contains variables: username, password, host
+> - Libraries used:
+>     - pandas
+>     - matplotlib
+>     - seaborn
+>     - numpy
+>     - scikit-learn
+>     - plotly
+>     - sktime
+>     - Prophet
 > - Run the Final_Report notebook or explore the other notebooks for greater insight into the project.
 
 ### Project Plan 
@@ -147,7 +154,7 @@ Recommendations:
   <ul>
    <li><b>Acquire</b> data from https://www.ercot.com/gridinfo/load/load_hist and https://www.visualcrossing.com/weather-data</li>
     <li>Clean and <b>prepare</b>data for the exploration. </li>
-    <li>Create wrangle.py to store functions I created to automate the cleaning and preparation process.</li>
+    <li>Create wrangle.py to store functions we created to automate the cleaning and preparation process.</li>
     <li>Separate train, validate, test subsets and scaled data.</li>
     <li><b>Explore</b> the data through visualizations; Document findings and takeaways.</li>
     <li>Perform <b>modeling</b>:
