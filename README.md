@@ -1,4 +1,5 @@
 # Energy Demand Forecast
+Authors: Arsène Boundaoné, Lochlyn Laskowski, Greg Maggard, Cayt Schlichting
 *Audience: Data Science Teams for Energy Grid Operators*
 
 
@@ -6,22 +7,22 @@
 
 ## Project Summary
 <hr style="background-color:silver;height:3px;" />
-There is a need for accurate energy demand forecasting in order for ERCOT to schedule energy generation and inform bidding prices. We analyzed historical weather data and ERCOT demand from 2010-2022 in order to create a time-series model to predict a three day forecast for energy demand in ERCOT's coastal region. Through exploration we examined the relationship between weather and ERCOT demand, as well as, date/time information and ERCOT demand. We utilized time-series models (Holt Winters and Facebook Prophet) to forecast ERCOT demand for a three-day period. The top performing model was a tuned Prophet model. It had a 3 day MAPE of 8.5% over the Test subset, compared to baseline's performance of 18.8%. We suggest deploying this model to predict energy demand, allowing for informed energy generation capacity planning.
+Accurate energy demand forecasting is crucial for planning energy generation capacity and informed energy prices. We analyzed historical weather data and ERCOT demand from 2010-2022 in order to create a time-series model to predict a three-day forecast for energy demand in ERCOT's coastal region. Through exploration we examined the relationship between weather and ERCOT demand, as well as date/time information and ERCOT demand. We utilized time-series models (Holt Winters and Facebook Prophet) to forecast ERCOT demand for a three-day period. The top performing model was a Prophet time-series model with regression. It had a three-day Mean Absolute Percentage Error of 8.5% over the Test subset, compared to baseline's performance of 18.8%. Although our model outperformed baseline, we would want to perform comparisons against models currently in production before recommending deployment.
 
 ### Project Deliverables
 > - A final report notebook
 > - Python modules for automation and to facilitate project reproduction
 > - Presentation 19 August 2022 (slides)
 > - Notebooks that show:
->  - Data acquisition and preparation 
->  - exploratory analysis not included in final report
->  - model creation, refinement and evaluation
+>    - Data acquisition and preparation 
+>    - exploratory analysis not included in final report
+>    - model creation, refinement and evaluation
 
 ### Initial questions on the data
 
 Weather and Energy Demand:
 >   - How does temperature impact energy demand? 
->   - Does humidity impact energy demand?
+>   - How do other weather features impact energy demand?
 
 Date/Time and Energy Demand:
 >   - How does the day of the week impact energy demand?
@@ -38,23 +39,18 @@ Date/Time and Energy Demand:
 **Project Goal:**
 Produce a time-series model that forecasts three days of energy demand in ERCOT's coastal region. Deploying this model will allow ERCOT to anticipate demand effectively in order to schedule energy generation and inform bidding prices.
 
-**Discoveries and Recommendations**
-
 Key Findings:
 > - Temperature has a strong correlation with ERCOT energy demand when the temperature is above 70 degrees and a moderate correlation when the temperature is below 50 degrees.
 > - Weekdays require more energy demand than the weekend.
 > - Holidays use less demand than non-holidays.
-> - Energy demand is lowest at 0400 and begins to increase shortly after. Energy demand peaks at 1700, and then gradually declines back to the lowest point.
-> - The top performing model was a tuned Prophet model. It had a 3 day MAPE of 8.5% over the Test subset, compared to baseline's performance of 18.8%.
-> - We did not see significant improvements in 1 day MAPE compared to 3 day MAPE for the Prophet models, however Holts-Winters performed significantly beter over the shorter time period.
+> - Energy demand is lowest at 4 AM and begins to increase shortly after. Energy demand peaks at 5 PM, and then gradually declines back to the lowest point.
+> - The top performing model was a tuned Prophet model. It had a three-day MAPE of 8.5% over the Test subset, compared to baseline's performance of 18.8%.
+> - We did not see significant improvements in 1 day MAPE compared to three-day MAPE for the Prophet models, however Holts-Winters performed significantly better over the shorter time period.
 
-Recommendations:
-> - We suggest deploying this model to predict energy demand, allowing for informed energy generation capacity planning.
-> - Utilizing uniform data entry processes in regards to date and time would ease in future acquisition of data.
-
-Next Steps:
-> - Review how load data is written and stored for more reliable acquisition and preparation for the model. Currently, the datetime format changes throughout the historical data. It would also be beneficial to have this information stored in UTC.
-> - Use historical weather forecasts compared with actual weather to create uncertainty bands for the model
+Recommendations and Next Steps:
+> - Although our model outperformed baseline, we would want to perform comparisons against models currently in production before recommending deployment.
+> - Standardize how load data is stored for more reliable acquisition and preparation for the model. Currently, the datetime format is inconsistent across the dataset. It would likely also be beneficial to have this information stored in UTC.
+> - Use historical weather forecasts compared with actual weather to create uncertainty bands for the model.
 > - Add additional holidays. For example, while the day after Thanksgiving is not a holiday, it likely has a distinct energy demand pattern that differs from a standard Friday.
 > - Create LSTM models. These will like better be able to forecast as they will use long-term historical data for day type patterning combined with short term historical data for time series forecasting.
 
@@ -73,7 +69,10 @@ Next Steps:
 |:-------|:----------|
 | dow | Day of the week. Mon-Sun |
 | is_weeekday | 1 = weekday 0 = weekend |
-| is_obs_holiday | 1 = holiday 0 = non-holiday|
+| is_obs_holiday | 1 = observed holiday 0 = non-holiday (Observed holidays only occur on weekdays)|
+|mean_temp| The average temperature in Fahrenheit for all four geographic locactions|
+|mean_feelslike| The average feelslike temperature for all four greographic locations|
+|mean_humidity| The average humidity for all four geographic locations|
 | hs_temp | Temperature in Fahrenheit in Houston |
 | hs_feelslike | Combination of temperature, wind chill & heat index in Houston|
 | hs_dew | Dew point in Houston |
@@ -126,9 +125,7 @@ Next Steps:
 | vc_solarradiation | Solar radiation in Victoria  |
 | vc_solarenergy | Solar energy in Victoria  |
 | vc_uvindex | UV index in Victoria |
-|mean_temp| The average temperature in Fahrenheit for all four geographic locactions|
-|mean_feelslike| The average feelslike temperature for all four greographic locations|
-|mean_humidity| The average humidity for all four geographic locations|
+
 
 
 <hr style="background-color:silver;height:3px;" />
@@ -136,9 +133,12 @@ Next Steps:
 ## Reproducing this project
 <hr style="background-color:silver;height:3px;" />
 
+ Although we have included the steps to reproduce our analyses, it is important to note that due to the commercial nature of our weather data acquired from Virtual Crossing, we are legally unable to include it in our repository. If one would like to recreate this study, we encourage them to acquire similar data and follow the steps outlined to generate a similar product.
+
 > You can reproduce this project with the following steps:
 > - Read this README
-> - Clone the repository or download all files into your working directory
+> - Clone the repository and perform your own data acquisition of the energy demand and weather information for your target region. 
+> - You will need to prepare your own data and modify any functions to handle your acquired columns.
 > - Libraries used:
 >     - pandas
 >     - matplotlib
