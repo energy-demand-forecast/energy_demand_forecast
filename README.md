@@ -1,5 +1,6 @@
 # Energy Demand Forecast
 Authors: Arsène Boundaoné, Lochlyn Laskowski, Greg Maggard, Cayt Schlichting
+
 *Audience: Data Science Teams for Energy Grid Operators*
 
 
