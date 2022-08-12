@@ -1,12 +1,12 @@
 # Energy Demand Forecast
-*Audience: The target audience for our final report is the data science team at ERCOT*
+*Audience: Data Science Teams for Energy Grid Operators*
 
 
 <hr style="background-color:silver;height:3px;" />
 
 ## Project Summary
 <hr style="background-color:silver;height:3px;" />
-There is a need for accurate energy demand forecasting in order for ERCOT to schedule energy generation and inform bidding prices. We analyzed historical weather data and ERCOT demand from 2010-2022 in order to create a time-series model to predict a three day forecast for energy demand in ERCOT's coastal region. Through exploration we examined the relationship between weather and ERCOT demand, as well as, date/time information and ERCOT demand. We utilized time-series models (Holt Winters and Facebook Prophet) to forecast ERCOT demand for a three-day period and beat baseline by %. We suggest using this model in production to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
+There is a need for accurate energy demand forecasting in order for ERCOT to schedule energy generation and inform bidding prices. We analyzed historical weather data and ERCOT demand from 2010-2022 in order to create a time-series model to predict a three day forecast for energy demand in ERCOT's coastal region. Through exploration we examined the relationship between weather and ERCOT demand, as well as, date/time information and ERCOT demand. We utilized time-series models (Holt Winters and Facebook Prophet) to forecast ERCOT demand for a three-day period. The top performing model was a tuned Prophet model. It had a 3 day MAPE of 8.5% over the Test subset, compared to baseline's performance of 18.8%. We suggest deploying this model to predict energy demand, allowing for informed energy generation capacity planning.
 
 ### Project Deliverables
 > - A final report notebook
@@ -41,19 +41,22 @@ Produce a time-series model that forecasts three days of energy demand in ERCOT'
 **Discoveries and Recommendations**
 
 Key Findings:
-> - Temperature has a strong correlation with ERCOT energy demand when the temperature is above 70 degrees and a moderate correlation when the temperature is below 50 degrees. 
+> - Temperature has a strong correlation with ERCOT energy demand when the temperature is above 70 degrees and a moderate correlation when the temperature is below 50 degrees.
 > - Weekdays require more energy demand than the weekend.
 > - Holidays use less demand than non-holidays.
-> - Energy demand is lowest at 0400 and begins to increase shortly after. Energy demand peaks at 1700, and then gradually declines back to the lowest point. 
-> - Modeling information?
-
-With additional time:
-> - We would like to explore the population growth in ERCOT's coastal region and how that has impacted energy demand.
-> - Perform additional moedling to include LSTM.
+> - Energy demand is lowest at 0400 and begins to increase shortly after. Energy demand peaks at 1700, and then gradually declines back to the lowest point.
+> - The top performing model was a tuned Prophet model. It had a 3 day MAPE of 8.5% over the Test subset, compared to baseline's performance of 18.8%.
+> - We did not see significant improvements in 1 day MAPE compared to 3 day MAPE for the Prophet models, however Holts-Winters performed significantly beter over the shorter time period.
 
 Recommendations:
-> We suggest delpoying this model to accurately predict energy demand, allowing for appropriate energy generation and ensuring ERCOT customers are not impacted by anomalous events.
-> Utilizing uniform data entry processes in regards to date and time would ease in future acquisition of data.
+> - We suggest deploying this model to predict energy demand, allowing for informed energy generation capacity planning.
+> - Utilizing uniform data entry processes in regards to date and time would ease in future acquisition of data.
+
+Next Steps:
+> - Review how load data is written and stored for more reliable acquisition and preparation for the model. Currently, the datetime format changes throughout the historical data. It would also be beneficial to have this information stored in UTC.
+> - Use historical weather forecasts compared with actual weather to create uncertainty bands for the model
+> - Add additional holidays. For example, while the day after Thanksgiving is not a holiday, it likely has a distinct energy demand pattern that differs from a standard Friday.
+> - Create LSTM models. These will like better be able to forecast as they will use long-term historical data for day type patterning combined with short term historical data for time series forecasting.
 
 
 
