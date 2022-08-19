@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import datetime
+import matplotlib.dates as mdates
 import re
 import os
 from pandas.tseries.holiday import USFederalHolidayCalendar
@@ -204,11 +205,11 @@ def print_model_results(name,df_p_1d,df_p_3d):
 #### EXPLORE FUNCTIONS ######
 def plot_temp_ercot(train):
     sns.scatterplot(data=train, x='mean_temp',y='ercot_load')
-    plt.xlabel('Mean Temperature (°F)',fontsize=14)
-    plt.ylabel("Coastal ERCOT Demand (MW)",fontsize=14)
+    plt.xlabel('Mean Temperature (°F)',fontsize=16)
+    plt.ylabel("ERCOT Demand (MW)",fontsize=16)
     plt.axvline(x=(50),color='black',ls='--')
     plt.axvline(x=(70),color='black',ls='--')
-    plt.title("ERCOT Demand and Mean Temperature",fontsize=14)
+    plt.title("ERCOT Demand and Mean Temperature",fontsize=18)
     plt.show()
 
 def temp_subgroups(train):
@@ -216,6 +217,12 @@ def temp_subgroups(train):
     mid_temp = train[(train.mean_temp>50)& (train.mean_temp<70)]
     greater_70 = train[train.mean_temp >=70]
     return less_50, mid_temp, greater_70
+
+def convert_hours(val,tick_number):
+    #convert hour to time data type
+    hour_min = datetime.time(int(val),0)
+    #return formatted time
+    return datetime.time.strftime(hour_min,'%I %p')
 
 def plot_weekday_energy(train):
     reg_days = train[train.is_obs_holiday == 0].copy()
@@ -230,7 +237,13 @@ def plot_weekday_energy(train):
     plt.title('Average ERCOT Demand by Hour and Day of Week',fontsize=18)
     plt.xlabel('Hour of Day',fontsize=16)
     plt.ylabel('ERCOT Demand (MW)',fontsize=16)
-    #plt.legend()
+    #Create x axis locator
+    locator = mdates.AutoDateLocator(minticks=3,maxticks=6) #set acceptable tick range
+    #set locator
+    ax.xaxis.set_major_locator(locator)
+    #Apply hour format function to x ticks
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(convert_hours))
+    #show legend & plot
     plt.legend(handles=handles,labels=labels,title=None,fontsize=14)
     plt.show()
     return None

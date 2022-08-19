@@ -4,6 +4,9 @@ import datetime
 import re
 import os
 from pandas.tseries.holiday import USFederalHolidayCalendar
+import seaborn as sns
+import matplotlib.pyplot as plt
+from IPython.display import Markdown, display
 
 def clean_ercot_datetime(df):
     '''
@@ -140,3 +143,121 @@ def get_combined_df(get_central = True):
         return df.tz_convert('US/Central')
     else:
         return df
+
+def get_prophet_df(get_central=True):
+    '''
+    Retrieves a cleaned dataframe and formats it for input into
+    the FB Prophet model.
+
+    Parameters:
+      (O) get_central: Bool (Default True) - Return the datetime index in US/Central time. False returns UTC.  
+    '''
+    #Acquire combined dataframe
+    df = get_combined_df(get_central = get_central)
+    #Pull index/load data into new 
+    df2 = pd.DataFrame(df.ercot_load)
+    #Move index out
+    df2.reset_index(drop=False, inplace=True)
+    #Rename columns
+    df2.rename(columns = {'datetime':'ds','ercot_load':'y'},inplace=True)
+    
+    return df2
+
+def get_prophet_df_w_meantemp():
+    '''
+    Retrieves a cleaned dataframe and formats it for input into
+    the FB Prophet model.
+    
+    NOTE: Prophet does not support timezone - need it in UTC, then make tz naive
+    '''
+    #Acquire combined dataframe
+    df = get_combined_df(get_central = False)
+    #Calculate mean_temp column
+    df['mean_temp'] = (df.hs_temp + df.gv_temp + df.pl_temp + df.vc_temp)/4
+
+    #Pull index/load/temp data into new dataframe
+    df2 = pd.DataFrame(df[['ercot_load','mean_temp']])
+
+    #Move index out
+    df2.reset_index(drop=False, inplace=True)
+    #Rename columns
+    df2.rename(columns = {'datetime':'ds','ercot_load':'y'},inplace=True)
+    #Make TZ naive
+    df2.ds = df2.ds.dt.tz_localize(None)
+    
+    return df2
+    
+def print_model_results(name,df_p_1d,df_p_3d):
+    #Print model name
+    print(f'\033[1m{name} model performance:\033[0m')
+    #grab model stats
+    rmse1 = df_p_1d.loc[0,'rmse']
+    mape1 = df_p_1d.loc[0,'mape']*100
+    rmse3 = df_p_3d.loc[0,'rmse']
+    mape3 = df_p_3d.loc[0,'mape']*100
+    print(f'1 day rmse: {round(rmse1,0)} MW')
+    print(f'1 day mape: {round(mape1,2)}%')
+    print(f'3 day rmse: {round(rmse3,0)} MW')
+    print(f'3 day mape: {round(mape3,2)}%')
+    return None
+
+#### EXPLORE FUNCTIONS ######
+def plot_temp_ercot(train):
+    sns.scatterplot(data=train, x='mean_temp',y='ercot_load')
+    plt.xlabel('Mean Temperature (°F)',fontsize=14)
+    plt.ylabel("Coastal ERCOT Demand (MW)",fontsize=14)
+    plt.axvline(x=(50),color='black',ls='--')
+    plt.axvline(x=(70),color='black',ls='--')
+    plt.title("ERCOT Demand and Mean Temperature",fontsize=14)
+    plt.show()
+
+def temp_subgroups(train):
+    less_50 = train[train.mean_temp <=50]
+    mid_temp = train[(train.mean_temp>50)& (train.mean_temp<70)]
+    greater_70 = train[train.mean_temp >=70]
+    return less_50, mid_temp, greater_70
+
+def plot_weekday_energy(train):
+    reg_days = train[train.is_obs_holiday == 0].copy()
+    display(Markdown('### Energy Use by Weekday'));
+    ax = reg_days.groupby([reg_days.dow, reg_days.index.hour]).ercot_load.mean().unstack(0).plot()
+    holly_days = train[train.is_obs_holiday == 1].copy()
+    holly_days.groupby([holly_days.index.hour]).ercot_load.mean().plot(label = 'Holiday', ax = ax, ls = '--')
+    #Reorder legend
+    handles, labels = ax.get_legend_handles_labels()
+    handles = [handles[1]] + handles[5:7] + [handles[4]] + [handles[0]] + handles[2:4] + [handles[7]]
+    labels = [labels[1]] + labels[5:7] + [labels[4]] + [labels[0]] + labels[2:4] + [labels[7]]
+    plt.title('Average ERCOT Demand by Hour and Day of Week',fontsize=18)
+    plt.xlabel('Hour of Day',fontsize=16)
+    plt.ylabel('ERCOT Demand (MW)',fontsize=16)
+    #plt.legend()
+    plt.legend(handles=handles,labels=labels,title=None,fontsize=14)
+    plt.show()
+    return None
+
+##### UTILS #####
+
+# Getting Mean Absolute Percentage Error#
+
+def mean_absolute_percentage_error(y_true, y_pred):
+    return np.mean(np.abs((y_true - y_pred) / y_true)) 
+
+# Holiday
+
+def get_holiday_df(trainr):
+    #create calendar object
+    cal = USFederalHolidayCalendar()
+    #get holidays as list of dates
+    train_holidays = cal.holidays(start=trainr.ds.min(),end=trainr.ds.max())
+
+    # Transition to dataframe with holiday, ds columns
+    holiday_df = pd.DataFrame(trainr.ds)
+    #For each datetime, get if it lands on a holiday
+    holiday_df['holiday'] = holiday_df.ds.dt.date.astype(str).isin(train_holidays.astype(str)).astype(int)
+
+    #Filter down to just the holidays
+    only_holidays = holiday_df[holiday_df.holiday==1]
+    #Convert that column to string
+    only_holidays.holiday = only_holidays.holiday.astype(str)
+
+    return only_holidays
